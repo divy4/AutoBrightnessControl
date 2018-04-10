@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="seekBarMax">200</integer>
+
+    <!-- settings -->
+    <item name="minBrightness" format="float" type="dimen">0</item>
+    <item name="maxBrightness" format="float" type="dimen">100</item>
+
+    <item name="minUpdateFreq" format="float" type="dimen">0.5</item>
+    <item name="maxUpdateFreq" format="float" type="dimen">10</item>
+
+    <item name="minTransition" format="float" type="dimen">0.5</item>
+    <item name="maxTransition" format="float" type="dimen">5</item>
+
+</resources>
