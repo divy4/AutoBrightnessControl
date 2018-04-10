@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Auto-Brightness Control</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Tab Names -->
+    <string name="settings_tab_button">Settings</string>
+    <string name="graph_tab_button">Curve</string>
+    <string name="profiles_tab_button">Profiles</string>
+
+    <!-- Settings -->
+    <string name="enable_control">Override default control</string>
+    <string name="enable_graph">Use brightness curve</string>
+    <string name="static_brightness_title">Default brightness</string>
+    <string name="update_freq_title">Update frequency</string>
+    <string name="transition_time_title">Transition time</string>
+</resources>
