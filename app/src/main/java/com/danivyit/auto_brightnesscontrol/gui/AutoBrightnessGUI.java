@@ -3,6 +3,7 @@ package com.danivyit.auto_brightnesscontrol.gui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,8 @@ import com.danivyit.auto_brightnesscontrol.R;
 import com.danivyit.auto_brightnesscontrol.gui.tab.GraphTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.ProfilesTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.SettingsTab;
+import com.danivyit.auto_brightnesscontrol.system.BackgroundService;
 import com.danivyit.auto_brightnesscontrol.system.Backlight;
-
-import java.util.Set;
 
 public class AutoBrightnessGUI extends AppCompatActivity {
 
@@ -43,6 +43,7 @@ public class AutoBrightnessGUI extends AppCompatActivity {
     private GraphTab graphTab;
     private ProfilesTab profilesTab;
     private SettingsTab settingsTab;
+    private BackgroundService backService;
 
     /**
      * Called when the activity is created.
@@ -60,9 +61,31 @@ public class AutoBrightnessGUI extends AppCompatActivity {
         // change tab when one is selected
         BottomNavigationView tabSelector = findViewById(R.id.tabSelector);
         tabSelector.setOnNavigationItemSelectedListener(new TabSelectListener());
-        // TEMP: set screen brightness
-        Backlight backlight = new Backlight(getApplicationContext(), 1);
-        backlight.transitionTo(1);
+        // background process
+        startService();
+    }
+
+    /**
+     * Called when the activity is destroyed.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService();
+    }
+
+    /**
+     * Starts the background service.
+     */
+    public void startService() {
+        startService(new Intent(getBaseContext(), BackgroundService.class));
+    }
+
+    /**
+     * Stops the background service.
+     */
+    public void stopService() {
+        stopService(new Intent(getBaseContext(), BackgroundService.class));
     }
 
     /**
