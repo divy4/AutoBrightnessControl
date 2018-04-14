@@ -1,9 +1,5 @@
 package com.danivyit.auto_brightnesscontrol;
 
-import android.content.res.Resources;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,7 +8,7 @@ import static org.junit.Assert.*;
 public class UtilTest extends Util {
 
     /**
-     *
+     * Asserts that two double values are similar.
      * @param expected
      */
     public void assertSimilar(double expected, double actual, double error) {

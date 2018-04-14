@@ -1,33 +1,17 @@
 package com.danivyit.auto_brightnesscontrol.system;
 
-import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
 
-public class Curve {
+public abstract class Curve {
 
-    private double minX;
-    private double maxX;
-    private double minY;
-    private double maxY;
-    private double minXSep;
     private NavigableMap<Double, Double> points;
 
     /**
      * Creates a new Curve.
-     * @param minX The minimum X value.
-     * @param maxX The maximum X value.
-     * @param minY The minimum Y value.
-     * @param maxY The maximum Y value.
-     * @param minXSep The minimum separation between two X values.
      */
-    public Curve(double minX, double maxX, double minY, double maxY, double minXSep) {
-        this.minX = minX;
-        this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
-        this.minXSep = minXSep;
+    public Curve() {
         points = new TreeMap<>();
     }
 
@@ -36,18 +20,81 @@ public class Curve {
      * @param x
      * @param y
      */
-    public void addPoint(double x, double y) {
+    public void put(double x, double y) {
         points.put(x, y);
     }
 
     /**
-     * Returns the x value on the curve that is closest to x.
+     * Deletes the point on the curve whose x value is closest to x.
+     * @param x
+     */
+    public void remove(double x) {
+        Double key = closestX(x);
+        if (key != null) {
+            points.remove(key);
+        }
+    }
+
+    /**
+     * Returns the smallest x value of a point on the curve.
+     * @return null if no points are on the curve.
+     */
+    public Double firstX() {
+        if (points.isEmpty()) {
+            return null;
+        } else {
+            return points.firstKey();
+        }
+    }
+
+    /**
+     * Returns the largest x value of a point on the curve.
+     * @return null if no points are on the curve.
+     */
+    public Double lastX() {
+        if (points.isEmpty()) {
+            return null;
+        } else {
+            return points.lastKey();
+        }
+    }
+
+    /**
+     * Returns the x value of the point closest to x that is less than or equal to x.
      * @param x
      * @return
      */
-    private double closestX(double x) {
-        // find closest values above and below
-        double less = points.floorKey(x);
-        double more = points.ceilingKey(x);
+    public Double floorX(double x) {
+        return points.floorKey(x);
     }
+
+    /**
+     * Returns the x value of the point closest to x that is greater than or equal to x.
+     * @param x
+     * @return
+     */
+    public Double ceilX(double x) {
+        return points.ceilingKey(x);
+    }
+
+    /**
+     * Returns the x value of a point on the curve that is closest to x.
+     * @param x
+     * @return The x value of the point if one exists, null otherwise.
+     */
+    public Double closestX(double x) {
+        Double best = points.floorKey(x);
+        Double ceil = points.ceilingKey(x);
+        if (ceil != null && (best == null || ceil - x < x - best)) {
+            best = ceil;
+        }
+        return best;
+    }
+
+    /**
+     * Predicts the y value of the curve at x.
+     * @param x
+     * @return Null if no points are on the curve.
+     */
+    public abstract Double predict(double x);
 }
