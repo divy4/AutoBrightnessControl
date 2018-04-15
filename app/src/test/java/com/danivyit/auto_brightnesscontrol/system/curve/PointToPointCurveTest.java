@@ -1,7 +1,8 @@
-package com.danivyit.auto_brightnesscontrol.system;
+package com.danivyit.auto_brightnesscontrol.system.curve;
 
 import android.support.v4.util.Pair;
-import android.util.Log;
+
+import com.danivyit.auto_brightnesscontrol.system.curve.PointToPointCurve;
 
 import org.junit.Before;
 import org.junit.Test;

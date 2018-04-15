@@ -1,10 +1,14 @@
-package com.danivyit.auto_brightnesscontrol.system;
+package com.danivyit.auto_brightnesscontrol.system.curve;
 
 import android.support.v4.util.Pair;
 
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
 
 public abstract class Curve {
@@ -52,6 +56,19 @@ public abstract class Curve {
      */
     public boolean isEmpty() {
         return points.isEmpty();
+    }
+
+    /**
+     * Returns the points on the curve in ascending order of x value.
+     * @return A sorted set of points.
+     */
+    public Vector<Pair<Double, Double>> getPoints() {
+        // convert navigable map to vector.
+        Vector<Pair<Double, Double>> pts = new Vector();
+        for (Map.Entry<Double, Double> entry: points.entrySet()) {
+            pts.add(new Pair(entry.getKey(), entry.getValue()));
+        }
+        return pts;
     }
 
     /**
