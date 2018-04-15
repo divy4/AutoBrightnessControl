@@ -83,7 +83,7 @@ public abstract class Curve {
      * @param x
      * @return null if no point exists.
      */
-    public Pair<Double, Double> floor(double x) {
+    public Pair<Double, Double> prev(double x) {
         return entryToPair(points.floorEntry(x));
     }
 
@@ -92,7 +92,7 @@ public abstract class Curve {
      * @param x
      * @return null if no point exists.
      */
-    public Pair<Double, Double> ceil(double x) {
+    public Pair<Double, Double> next(double x) {
         return entryToPair(points.ceilingEntry(x));
     }
 
@@ -102,8 +102,8 @@ public abstract class Curve {
      * @return null if no point exists.
      */
     public Pair<Double, Double> closest(double x) {
-        Pair<Double, Double> best = floor(x);
-        Pair<Double, Double> ceil = ceil(x);
+        Pair<Double, Double> best = prev(x);
+        Pair<Double, Double> ceil = next(x);
         if (ceil != null && (best == null || ceil.first - x < x - best.first)) {
             best = ceil;
         }
