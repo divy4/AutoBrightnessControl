@@ -1,8 +1,9 @@
-package com.danivyit.auto_brightnesscontrol.system;
+package com.danivyit.auto_brightnesscontrol.system.curve;
 
 import android.support.v4.util.Pair;
 
 import com.danivyit.auto_brightnesscontrol.Util;
+import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 public class PointToPointCurve extends Curve {
 

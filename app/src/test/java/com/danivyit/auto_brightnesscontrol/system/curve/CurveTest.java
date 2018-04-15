@@ -1,9 +1,17 @@
-package com.danivyit.auto_brightnesscontrol.system;
+package com.danivyit.auto_brightnesscontrol.system.curve;
 
 import android.support.v4.util.Pair;
 
+import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
+import com.danivyit.auto_brightnesscontrol.system.curve.PointToPointCurve;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +20,15 @@ public class CurveTest {
     private Curve curve;
     private Pair<Double, Double> p0, p1, p2, p3, p4;
     private double err;
+
+    /**
+     * Asserts that two double values are similar.
+     * @param expected
+     */
+    public void assertSimilar(double expected, double actual, double error) {
+        double absDiff = Math.abs(expected - actual);
+        assert(absDiff < error);
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -48,6 +65,24 @@ public class CurveTest {
         assertEquals(p2, curve.first());
         curve.remove(2.4);
         assertEquals(p3, curve.first());
+    }
+
+    @Test
+    public void isEmpty() {
+        assertFalse(curve.isEmpty());
+        curve = new PointToPointCurve();
+        assertTrue(curve.isEmpty());
+    }
+
+    @Test
+    public void getPoints() {
+        Vector<Pair<Double, Double>> expected = new Vector();
+        expected.add(p0);
+        expected.add(p1);
+        expected.add(p2);
+        expected.add(p3);
+        expected.add(p4);
+        assertEquals(expected, curve.getPoints());
     }
 
     @Test
