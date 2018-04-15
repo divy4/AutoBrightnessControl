@@ -1,5 +1,7 @@
 package com.danivyit.auto_brightnesscontrol.system;
 
+import android.support.v4.util.Pair;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +10,7 @@ import static org.junit.Assert.*;
 public class CurveTest {
 
     private Curve curve;
+    private Pair<Double, Double> p0, p1, p2, p3, p4;
     private double err;
 
     /**
@@ -21,92 +24,99 @@ public class CurveTest {
 
     @Before
     public void setUp() throws Exception {
+        p0 = new Pair(0.0, 4.0);
+        p1 = new Pair(1.0, 1.0);
+        p2 = new Pair(2.0, 0.0);
+        p3 = new Pair(3.0, 3.0);
+        p4 = new Pair(4.0, 2.0);
         curve = new PointToPointCurve();
-        curve.put(0, 4);
-        curve.put(1, 1);
-        curve.put(2, 0);
-        curve.put(3, 3);
-        curve.put(4, 2);
+        curve.put(p0);
+        curve.put(p1);
+        curve.put(p2);
+        curve.put(p3);
+        curve.put(p4);
         err = 1e-10;
     }
 
     @Test
     public void put() {
         curve = new PointToPointCurve();
-        assertEquals(null, curve.firstX());
-        curve.put(0, 0);
-        assertSimilar(0, curve.firstX(), err);
+        assertEquals(null, curve.first());
+        curve.put(p0.first, p0.second);
+        assertEquals(p0, curve.first());
+        curve.put(p1);
+        assertEquals(p1, curve.last());
     }
 
     @Test
     public void remove() {
-        assertSimilar(0, curve.firstX(), err);
+        assertEquals(p0, curve.first());
         curve.remove(0);
-        assertSimilar(1, curve.firstX(), err);
+        assertEquals(p1, curve.first());
         curve.remove(0);
-        assertSimilar(2, curve.firstX(), err);
+        assertEquals(p2, curve.first());
         curve.remove(2.4);
-        assertSimilar(3, curve.firstX(), err);
+        assertEquals(p3, curve.first());
     }
 
     @Test
-    public void firstX() {
+    public void first() {
         curve = new PointToPointCurve();
-        assertEquals(null, curve.firstX());
-        curve.put(0, 0);
-        assertSimilar(0, curve.firstX(), err);
-        curve.put(-1, 0);
-        assertSimilar(-1, curve.firstX(), err);
-        curve.put(1, 0);
-        assertSimilar(-1, curve.firstX(), err);
+        assertEquals(null, curve.first());
+        curve.put(p1);
+        assertEquals(p1, curve.first());
+        curve.put(p0);
+        assertEquals(p0, curve.first());
+        curve.put(p2);
+        assertEquals(p0, curve.first());
     }
 
     @Test
-    public void lastX() {
+    public void last() {
         curve = new PointToPointCurve();
-        assertEquals(null, curve.lastX());
-        curve.put(0, 0);
-        assertSimilar(0, curve.lastX(), err);
-        curve.put(-1, 0);
-        assertSimilar(0, curve.lastX(), err);
-        curve.put(1, 0);
-        assertSimilar(1, curve.lastX(), err);
+        assertEquals(null, curve.last());
+        curve.put(p1);
+        assertEquals(p1, curve.last());
+        curve.put(p0);
+        assertEquals(p1, curve.last());
+        curve.put(p2);
+        assertEquals(p2, curve.last());
     }
 
     @Test
-    public void floorX() {
-        assertEquals(null, curve.floorX(-1));
-        assertSimilar(0, curve.floorX(0), err);
-        assertSimilar(0, curve.floorX(0.99), err);
-        assertSimilar(1, curve.floorX(1), err);
-        assertSimilar(4, curve.floorX(1e10), err);
+    public void floor() {
+        assertEquals(null, curve.floor(-1));
+        assertEquals(p0, curve.floor(0));
+        assertEquals(p0, curve.floor(0.99));
+        assertEquals(p1, curve.floor(1));
+        assertEquals(p4, curve.floor(1e10));
         curve = new PointToPointCurve();
-        assertEquals(null, curve.floorX(0));
+        assertEquals(null, curve.floor(0));
     }
 
     @Test
-    public void ceilX() {
-        assertEquals(null, curve.ceilX(5));
-        assertSimilar(4, curve.ceilX(4), err);
-        assertSimilar(4, curve.ceilX(3.1), err);
-        assertSimilar(3, curve.ceilX(3), err);
-        assertSimilar(0, curve.ceilX(-1e10), err);
+    public void ceil() {
+        assertEquals(null, curve.ceil(5));
+        assertEquals(p4, curve.ceil(4));
+        assertEquals(p4, curve.ceil(3.1));
+        assertEquals(p3, curve.ceil(3));
+        assertEquals(p0, curve.ceil(-1e10));
         curve = new PointToPointCurve();
-        assertEquals(null, curve.ceilX(0));
+        assertEquals(null, curve.ceil(0));
     }
 
     @Test
-    public void closestX() {
-        assertSimilar(0, curve.closestX(-1e10), err);
-        assertSimilar(0, curve.closestX(0), err);
-        assertSimilar(0, curve.closestX(0.4), err);
+    public void closest() {
+        assertEquals(p0, curve.closest(-1e10));
+        assertEquals(p0, curve.closest(0));
+        assertEquals(p0, curve.closest(0.4));
         try {
-            assertSimilar(0, curve.closestX(0.5), err);
+            assertEquals(p0, curve.closest(0.5));
         } catch (Exception e) {
-            assertSimilar(1, curve.closestX(0.5), err);
+            assertEquals(p1, curve.closest(0.5));
         }
-        assertSimilar(1, curve.closestX(0.6), err);
-        assertSimilar(4, curve.closestX(1e10), err);
+        assertEquals(p1, curve.closest(0.6));
+        assertEquals(p4, curve.closest(1e10));
 
     }
 }
