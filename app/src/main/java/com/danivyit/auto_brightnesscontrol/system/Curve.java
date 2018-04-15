@@ -1,5 +1,8 @@
 package com.danivyit.auto_brightnesscontrol.system;
 
+import android.support.v4.util.Pair;
+
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -25,70 +28,99 @@ public abstract class Curve {
     }
 
     /**
+     * Adds a point to the curve.
+     * @param p
+     */
+    public void put(Pair<Double, Double> p) {
+        put(p.first, p.second);
+    }
+
+    /**
      * Deletes the point on the curve whose x value is closest to x.
      * @param x
      */
     public void remove(double x) {
-        Double key = closestX(x);
-        if (key != null) {
-            points.remove(key);
+        Pair<Double, Double> p = closest(x);
+        if (p != null) {
+            points.remove(p.first);
         }
     }
 
     /**
-     * Returns the smallest x value of a point on the curve.
+     * Tests if the curve contains no points.
+     * @return
+     */
+    public boolean isEmpty() {
+        return points.isEmpty();
+    }
+
+    /**
+     * Returns the leftmost point on the curve.
      * @return null if no points are on the curve.
      */
-    public Double firstX() {
+    public Pair<Double, Double> first() {
         if (points.isEmpty()) {
             return null;
         } else {
-            return points.firstKey();
+            return entryToPair(points.firstEntry());
         }
     }
 
     /**
      * Returns the largest x value of a point on the curve.
-     * @return null if no points are on the curve.
+     * @return null if no point exists.
      */
-    public Double lastX() {
+    public Pair<Double, Double> last() {
         if (points.isEmpty()) {
             return null;
         } else {
-            return points.lastKey();
+            return entryToPair(points.lastEntry());
         }
     }
 
     /**
-     * Returns the x value of the point closest to x that is less than or equal to x.
+     * Returns the point whose x value is closest to x and is less than or equal to x.
      * @param x
-     * @return
+     * @return null if no point exists.
      */
-    public Double floorX(double x) {
-        return points.floorKey(x);
+    public Pair<Double, Double> floor(double x) {
+        return entryToPair(points.floorEntry(x));
     }
 
     /**
-     * Returns the x value of the point closest to x that is greater than or equal to x.
+     * Returns the point whose x value is closest to x and is greater than or equal to x.
      * @param x
-     * @return
+     * @return null if no point exists.
      */
-    public Double ceilX(double x) {
-        return points.ceilingKey(x);
+    public Pair<Double, Double> ceil(double x) {
+        return entryToPair(points.ceilingEntry(x));
     }
 
     /**
-     * Returns the x value of a point on the curve that is closest to x.
+     * Returns the point whose x value is closest to x.
      * @param x
-     * @return The x value of the point if one exists, null otherwise.
+     * @return null if no point exists.
      */
-    public Double closestX(double x) {
-        Double best = points.floorKey(x);
-        Double ceil = points.ceilingKey(x);
-        if (ceil != null && (best == null || ceil - x < x - best)) {
+    public Pair<Double, Double> closest(double x) {
+        Pair<Double, Double> best = floor(x);
+        Pair<Double, Double> ceil = ceil(x);
+        if (ceil != null && (best == null || ceil.first - x < x - best.first)) {
             best = ceil;
         }
         return best;
+    }
+
+    /**
+     * Converts a Map.Entry to a pair.
+     * @param entry
+     * @return
+     */
+    private Pair<Double, Double> entryToPair(Map.Entry<Double, Double> entry) {
+        if (entry == null) {
+            return null;
+        } else {
+            return new Pair(entry.getKey(), entry.getValue());
+        }
     }
 
     /**
