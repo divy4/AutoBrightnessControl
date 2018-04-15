@@ -26,7 +26,7 @@ public class Util {
      * @return
      */
     static public double mapRange(double in, double minIn, double maxIn, double minOut, double maxOut) {
-        return minOut + (in * (maxOut - minOut)) / maxIn;
+        return minOut + ((in - minIn) * (maxOut - minOut)) / (maxIn - minIn);
     }
 
     /**

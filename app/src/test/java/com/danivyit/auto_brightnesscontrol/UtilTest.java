@@ -36,6 +36,14 @@ public class UtilTest extends Util {
     }
 
     @Test
+    public void mapRange() {
+        double err = 1e-12;
+        assertSimilar(4,   Util.mapRange(1, 1, 3, 4, 7), err);
+        assertSimilar(5.5, Util.mapRange(2, 1, 3, 4, 7), err);
+        assertSimilar(7,   Util.mapRange(3, 1, 3, 4, 7), err);
+    }
+
+    @Test
     public void mapSeekValue() {
         double err = 1e-12;
         int iStart = 0;

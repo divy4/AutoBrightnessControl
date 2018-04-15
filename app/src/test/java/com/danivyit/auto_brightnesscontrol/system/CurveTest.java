@@ -13,15 +13,6 @@ public class CurveTest {
     private Pair<Double, Double> p0, p1, p2, p3, p4;
     private double err;
 
-    /**
-     * Asserts that two double values are similar.
-     * @param expected
-     */
-    public void assertSimilar(double expected, double actual, double error) {
-        double absDiff = Math.abs(expected - actual);
-        assert(absDiff < error);
-    }
-
     @Before
     public void setUp() throws Exception {
         p0 = new Pair(0.0, 4.0);
@@ -85,24 +76,24 @@ public class CurveTest {
 
     @Test
     public void floor() {
-        assertEquals(null, curve.floor(-1));
-        assertEquals(p0, curve.floor(0));
-        assertEquals(p0, curve.floor(0.99));
-        assertEquals(p1, curve.floor(1));
-        assertEquals(p4, curve.floor(1e10));
+        assertEquals(null, curve.prev(-1));
+        assertEquals(p0, curve.prev(0));
+        assertEquals(p0, curve.prev(0.99));
+        assertEquals(p1, curve.prev(1));
+        assertEquals(p4, curve.prev(1e10));
         curve = new PointToPointCurve();
-        assertEquals(null, curve.floor(0));
+        assertEquals(null, curve.prev(0));
     }
 
     @Test
     public void ceil() {
-        assertEquals(null, curve.ceil(5));
-        assertEquals(p4, curve.ceil(4));
-        assertEquals(p4, curve.ceil(3.1));
-        assertEquals(p3, curve.ceil(3));
-        assertEquals(p0, curve.ceil(-1e10));
+        assertEquals(null, curve.next(5));
+        assertEquals(p4, curve.next(4));
+        assertEquals(p4, curve.next(3.1));
+        assertEquals(p3, curve.next(3));
+        assertEquals(p0, curve.next(-1e10));
         curve = new PointToPointCurve();
-        assertEquals(null, curve.ceil(0));
+        assertEquals(null, curve.next(0));
     }
 
     @Test
