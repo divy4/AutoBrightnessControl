@@ -20,6 +20,34 @@ public abstract class Curve {
     }
 
     /**
+     * Constructs a curve from a string.
+     * @param str A string created from the toString() method.
+     */
+    public Curve(String str) {
+        points = new TreeMap<>();
+        for (String line: str.split("\n")) {
+            if (line != "") {
+                String[] values = line.split(",");
+                double x = Double.parseDouble(values[0]);
+                double y = Double.parseDouble(values[1]);
+                put(x, y);
+            }
+        }
+    }
+
+    /**
+     * Prints out information about the curve in string format.
+     * @return
+     */
+    public String toString() {
+        String str = "";
+        for (Pair<Double, Double> point: getPoints()) {
+            str += Double.toString(point.first) + "," + Double.toString(point.second) + "\n";
+        }
+        return str;
+    }
+
+    /**
      * Adds a point to the curve.
      * @param x
      * @param y
