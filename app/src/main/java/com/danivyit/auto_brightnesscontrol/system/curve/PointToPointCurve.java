@@ -1,5 +1,6 @@
 package com.danivyit.auto_brightnesscontrol.system.curve;
 
+import android.graphics.Point;
 import android.support.v4.util.Pair;
 
 import com.danivyit.auto_brightnesscontrol.Util;
@@ -9,6 +10,21 @@ public class PointToPointCurve extends Curve {
 
     // the minimum distance the x values of two points should be before they are considered the same point.
     private static double planck = 1e-10;
+
+    /**
+     * Constructs a PointToPointCurve.
+     */
+    public PointToPointCurve() {
+        super();
+    }
+
+    /**
+     * Constructs a PointToPointCurve from a string.
+     * @param str A string created from the toString() method.
+     */
+    public PointToPointCurve(String str) {
+        super(str);
+    }
 
     /**
      * See Curve.predict.

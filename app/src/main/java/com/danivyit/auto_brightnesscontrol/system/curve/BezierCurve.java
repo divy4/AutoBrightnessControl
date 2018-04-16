@@ -105,14 +105,14 @@ public class BezierCurve extends Curve {
             double t = Util.mapRange(approxIndex, 0, numPoints - 1, 0, 1);
             approxPts.add(computePoint(t, controlPts));
         }
-        return controlPts;
+        return approxPts;
     }
 
     /**
      * Updates the PointToPointCurve that estimates the bezier curve.
      * @param numPoints The number of points to use to approximate the curve.
      */
-    public void updateP2PCurve(int numPoints) {
+    private void updateP2PCurve(int numPoints) {
         Vector<Pair<Double, Double>> points = computePoints(numPoints);
         this.p2pCurve = new PointToPointCurve();
         for (Pair<Double, Double> point: points) {
@@ -127,6 +127,9 @@ public class BezierCurve extends Curve {
      */
     @Override
     public Double predict(double x) {
+        if (isEmpty()) {
+            return null;
+        }
         if (this.p2pCurve == null) {
             updateP2PCurve(this.numApproxPoints);
         }
