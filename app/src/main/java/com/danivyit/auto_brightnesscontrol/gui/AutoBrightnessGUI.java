@@ -8,9 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.danivyit.auto_brightnesscontrol.R;
+import com.danivyit.auto_brightnesscontrol.control.Controller;
 import com.danivyit.auto_brightnesscontrol.gui.tab.GraphTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.ProfilesTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.SettingsTab;
@@ -43,7 +45,7 @@ public class AutoBrightnessGUI extends AppCompatActivity {
     private GraphTab graphTab;
     private ProfilesTab profilesTab;
     private SettingsTab settingsTab;
-    private BackgroundService backService;
+    private Controller controller;
 
     /**
      * Called when the activity is created.
@@ -61,31 +63,8 @@ public class AutoBrightnessGUI extends AppCompatActivity {
         // change tab when one is selected
         BottomNavigationView tabSelector = findViewById(R.id.tabSelector);
         tabSelector.setOnNavigationItemSelectedListener(new TabSelectListener());
-        // background process
-        startService();
-    }
-
-    /**
-     * Called when the activity is destroyed.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopService();
-    }
-
-    /**
-     * Starts the background service.
-     */
-    public void startService() {
-        startService(new Intent(getBaseContext(), BackgroundService.class));
-    }
-
-    /**
-     * Stops the background service.
-     */
-    public void stopService() {
-        stopService(new Intent(getBaseContext(), BackgroundService.class));
+        // controller
+        controller = new Controller(this);
     }
 
     /**
