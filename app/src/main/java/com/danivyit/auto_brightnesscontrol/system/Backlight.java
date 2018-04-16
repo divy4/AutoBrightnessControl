@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.danivyit.auto_brightnesscontrol.Util;
+import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 public class Backlight {
 
@@ -73,7 +74,7 @@ public class Backlight {
 
     /**
      * Sets the screen brightness without transition.
-     * @param brightness
+     * @param brightness A number in [0,1] indicating what percentage the backlight should be set to.
      */
     public void setBrightness(double brightness) {
         // map to [0, 255]

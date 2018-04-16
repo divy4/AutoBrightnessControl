@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 public class BackgroundService extends IntentService {
 
@@ -23,7 +24,7 @@ public class BackgroundService extends IntentService {
     public void onCreate() {
         super.onCreate();
         backlight = new Backlight(getApplicationContext(), 1);
-        backlight.transitionTo(1);
+        //backlight.setBrightness(0.5);
     }
 
     /**
@@ -33,6 +34,7 @@ public class BackgroundService extends IntentService {
     @Override
     protected void onHandleIntent(Intent workIntent) {
         String input = workIntent.getDataString();
+        Log.i("asdf", input);
     }
 
 }
