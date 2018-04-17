@@ -1,16 +1,14 @@
 package com.danivyit.auto_brightnesscontrol.control;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
 import com.danivyit.auto_brightnesscontrol.gui.AutoBrightnessGUI;
-import com.danivyit.auto_brightnesscontrol.system.BackgroundService;
+import com.danivyit.auto_brightnesscontrol.system.BacklightUpdater;
+import com.danivyit.auto_brightnesscontrol.system.curve.BezierCurve;
+import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 public class Controller {
 
     private AutoBrightnessGUI gui;
-    private Intent serviceIntent;
+    private BacklightUpdater lightUpdater;
 
     /**
      * Creates a new Controller.
@@ -18,23 +16,21 @@ public class Controller {
      */
     public Controller(AutoBrightnessGUI gui) {
         this.gui = gui;
-        startService();
+        // TEMP: create basic adjustment curve
+        Curve curve = new BezierCurve(10);
+        curve.put(0, 0.2);
+        curve.put(0.9, 0.4);
+        curve.put(1, 0.8);
+        this.lightUpdater = new BacklightUpdater(0.5, gui.getApplicationContext());
+        lightUpdater.setAdjustmentCurve(curve);
+        lightUpdater.start();
     }
 
     /**
-     * Starts the background service.
+     * Called when the application is being destroyed.
      */
-    public void startService() {
-        serviceIntent = new Intent(gui.getBaseContext(), BackgroundService.class);
-        gui.startService(serviceIntent);
-
+    public void onDestroy() {
+        lightUpdater.queueStop();
     }
 
-    /**
-     * Stops the background service.
-     */
-    public void stopService() {
-        gui.stopService(serviceIntent);
-        serviceIntent = null;
-    }
 }

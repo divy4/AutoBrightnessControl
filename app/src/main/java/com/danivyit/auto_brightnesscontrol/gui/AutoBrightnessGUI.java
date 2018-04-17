@@ -16,8 +16,6 @@ import com.danivyit.auto_brightnesscontrol.control.Controller;
 import com.danivyit.auto_brightnesscontrol.gui.tab.GraphTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.ProfilesTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.SettingsTab;
-import com.danivyit.auto_brightnesscontrol.system.BackgroundService;
-import com.danivyit.auto_brightnesscontrol.system.Backlight;
 
 public class AutoBrightnessGUI extends AppCompatActivity {
 
@@ -65,6 +63,15 @@ public class AutoBrightnessGUI extends AppCompatActivity {
         tabSelector.setOnNavigationItemSelectedListener(new TabSelectListener());
         // controller
         controller = new Controller(this);
+    }
+
+    /**
+     * Called when the activity is being destroyed.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        controller.onDestroy();
     }
 
     /**
