@@ -65,7 +65,7 @@ public class Backlight {
             // map time to brightness
             double curr = Util.mapRange(currTime, startTime, endTime, startBrightness, brightness);
             setBrightness(curr);
-            SystemClock.sleep(16);
+            SystemClock.sleep(32);
             currTime = System.currentTimeMillis();
         }
         // set final value
@@ -80,12 +80,12 @@ public class Backlight {
         // map to [0, 255]
         int intBrightness = doubleToRaw(brightness);
         // update only if brightness is different than before and we have permission
-        if (intBrightness != currBrighteness && Settings.System.canWrite(context)) {
+        if (Settings.System.canWrite(context)) {
             ContentResolver resolver = context.getContentResolver();
             // try to set brightness
             try {
                 Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-                Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, 255);
+                Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, intBrightness);
                 // store integer brightness
                 currBrighteness = intBrightness;
             } catch (Exception e) {
