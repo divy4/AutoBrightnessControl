@@ -21,7 +21,8 @@ public class Controller {
         curve.put(0, 0.2);
         curve.put(0.9, 0.4);
         curve.put(1, 0.8);
-        this.lightUpdater = new BacklightUpdater(0.5, gui.getApplicationContext());
+        // setup light updater
+        this.lightUpdater = new BacklightUpdater(gui.getApplicationContext(), 2, 0.1);
         lightUpdater.setAdjustmentCurve(curve);
         lightUpdater.start();
     }

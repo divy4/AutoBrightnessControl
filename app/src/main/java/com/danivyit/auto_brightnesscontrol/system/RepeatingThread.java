@@ -1,7 +1,6 @@
 package com.danivyit.auto_brightnesscontrol.system;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
