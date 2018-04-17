@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import com.danivyit.auto_brightnesscontrol.Util;
 import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
@@ -19,12 +18,14 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
     private double ambientLight;
 
     /**
-     * The amount of time (in seconds) to sleep before the backlight is updated again.
-     * @param delay
+     * Creates a new BacklightUpdater.
+     * @param applicationContext The application context.
+     * @param delay The amount of time (in seconds) to sleep before the backlight is updated again.
+     * @param transitionTime The amount of time the updater uses to transition between brightness levels. Should be less than delay.
      */
-    public BacklightUpdater(double delay, Context applicationContext) {
+    public BacklightUpdater(Context applicationContext, double delay, double transitionTime) {
         super(delay);
-        this.backlight = new Backlight(applicationContext, 1);
+        this.backlight = new Backlight(applicationContext, transitionTime);
         this.adjustmentCurve = null;
         // get light sensor
         this.manager = (SensorManager) applicationContext.getSystemService(Context.SENSOR_SERVICE);
@@ -32,6 +33,12 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
         // register light sensor
         this.manager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.ambientLight = 0;
+    }
+
+    @Override
+    public void queueStop() {
+        super.queueStop();
+        manager.unregisterListener(this);
     }
 
     /**
@@ -53,7 +60,7 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
         if (adjustmentCurve != null) {
             brightness = adjustmentCurve.predict(brightness);
         }
-        backlight.setBrightness(brightness);
+        backlight.transitionTo(brightness);
     }
 
     /**

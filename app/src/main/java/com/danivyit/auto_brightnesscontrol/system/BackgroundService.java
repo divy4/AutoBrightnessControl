@@ -24,7 +24,6 @@ public class BackgroundService extends IntentService {
     public void onCreate() {
         super.onCreate();
         backlight = new Backlight(getApplicationContext(), 1);
-        //backlight.setBrightness(0.5);
     }
 
     /**

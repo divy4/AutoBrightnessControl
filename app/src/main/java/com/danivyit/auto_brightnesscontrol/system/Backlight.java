@@ -8,7 +8,6 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.danivyit.auto_brightnesscontrol.Util;
-import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 public class Backlight {
 
@@ -21,7 +20,7 @@ public class Backlight {
      * @param applicationContext The application context of the app.
      * @param transitionTime The amount of time the backlight should spend transitioning between brightness values.
      */
-    public Backlight(Context applicationContext, int transitionTime) {
+    public Backlight(Context applicationContext, double transitionTime) {
         this.context = applicationContext;
         this.transitionTime = transitionTime;
         this.currBrighteness = 0;
@@ -65,7 +64,7 @@ public class Backlight {
             // map time to brightness
             double curr = Util.mapRange(currTime, startTime, endTime, startBrightness, brightness);
             setBrightness(curr);
-            SystemClock.sleep(32);
+            SystemClock.sleep(16);
             currTime = System.currentTimeMillis();
         }
         // set final value
