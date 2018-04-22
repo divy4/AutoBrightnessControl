@@ -113,11 +113,27 @@ public class BezierCurve extends Curve {
      * @param numPoints The number of points to use to approximate the curve.
      */
     private void updateP2PCurve(int numPoints) {
-        Vector<Pair<Double, Double>> points = computePoints(numPoints);
-        this.p2pCurve = new PointToPointCurve();
-        for (Pair<Double, Double> point: points) {
-            this.p2pCurve.put(point);
+        // only update when needed
+        if (this.p2pCurve == null) {
+            this.numApproxPoints = numPoints;
+            // compute!
+            Vector<Pair<Double, Double>> points = computePoints(numPoints);
+            // build curve
+            this.p2pCurve = new PointToPointCurve();
+            for (Pair<Double, Double> point : points) {
+                this.p2pCurve.put(point);
+            }
         }
+    }
+
+    /**
+     * Returns a copy of the curve as a point to point curve.
+     * @return
+     */
+    @Override
+    public PointToPointCurve asPointToPoint() {
+        updateP2PCurve(this.numApproxPoints);
+        return this.p2pCurve;
     }
 
     /**
@@ -130,9 +146,7 @@ public class BezierCurve extends Curve {
         if (isEmpty()) {
             return null;
         }
-        if (this.p2pCurve == null) {
-            updateP2PCurve(this.numApproxPoints);
-        }
+        updateP2PCurve(this.numApproxPoints);
         return this.p2pCurve.predict(x);
     }
 }

@@ -7,6 +7,6 @@
     <color name="graphBackground">#FFFFFF</color>
     <color name="graphLines">#AAAAAA</color>
     <color name="graphCurve">#000000</color>
-    <color name="graphDot">#666666</color>
+    <color name="graphDot">#d21313</color>
 
 </resources>

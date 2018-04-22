@@ -27,6 +27,15 @@ public class PointToPointCurve extends Curve {
     }
 
     /**
+     * Returns a copy of the curve as a point to point curve.
+     * @return
+     */
+    @Override
+    public PointToPointCurve asPointToPoint() {
+        return this;
+    }
+
+    /**
      * See Curve.predict.
      * @param x
      * @return

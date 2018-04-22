@@ -1,5 +1,6 @@
 package com.danivyit.auto_brightnesscontrol.system.curve;
 
+import android.graphics.Point;
 import android.support.v4.util.Pair;
 
 import java.util.Map;
@@ -94,6 +95,18 @@ public abstract class Curve {
             pts.add(new Pair(entry.getKey(), entry.getValue()));
         }
         return pts;
+    }
+
+    /**
+     * Returns a copy of the curve as a point to point curve.
+     * @return
+     */
+    public PointToPointCurve asPointToPoint() {
+        PointToPointCurve p2p = new PointToPointCurve();
+        for (Pair<Double, Double> p : getPoints()) {
+            p2p.put(p);
+        }
+        return p2p;
     }
 
     /**
