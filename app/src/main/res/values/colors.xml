@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="graphBackground">#FFFFFF</color>
+    <color name="graphLines">#AAAAAA</color>
+    <color name="graphCurve">#000000</color>
+    <color name="graphDot">#666666</color>
+
 </resources>

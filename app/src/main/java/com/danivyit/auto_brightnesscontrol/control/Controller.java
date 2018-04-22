@@ -1,5 +1,9 @@
 package com.danivyit.auto_brightnesscontrol.control;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+
 import com.danivyit.auto_brightnesscontrol.gui.AutoBrightnessGUI;
 import com.danivyit.auto_brightnesscontrol.system.BacklightUpdater;
 import com.danivyit.auto_brightnesscontrol.system.curve.BezierCurve;
@@ -19,7 +23,6 @@ public class Controller {
         // TEMP: create basic adjustment curve
         Curve curve = new BezierCurve(10);
         curve.put(0, 0.2);
-        curve.put(0.9, 0.4);
         curve.put(1, 0.8);
         // setup light updater
         this.lightUpdater = new BacklightUpdater(gui.getApplicationContext(), 2, 0.1);
