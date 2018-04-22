@@ -3,7 +3,7 @@
 
     <integer name="seekBarMax">200</integer>
 
-    <!-- settings -->
+    <!-- limits -->
     <item name="minBrightness" format="float" type="dimen">0</item>
     <item name="maxBrightness" format="float" type="dimen">100</item>
 
@@ -12,5 +12,9 @@
 
     <item name="minTransition" format="float" type="dimen">0.5</item>
     <item name="maxTransition" format="float" type="dimen">5</item>
+
+    <!-- graph settings -->
+    <!-- the number of ways each axis on a graph should be divided -->
+    <integer name="graphAxisSections">20</integer>
 
 </resources>
