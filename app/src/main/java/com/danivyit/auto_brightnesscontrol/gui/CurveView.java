@@ -71,6 +71,22 @@ public class CurveView extends View {
         curve.put(1, 1);
     }
 
+    private double xPixelToPos(int x) {
+        return Util.mapRange(x, 0,getWidth() - 1, 0, 1);
+    }
+
+    private double yPixelToPos(int y) {
+        return Util.mapRange(y, 0,getHeight() - 1, 1, 0);
+    }
+
+    private double xPosToPixel(double x) {
+        return Util.mapRange(x, 0, 1, 0, getWidth() - 1);
+    }
+
+    private double yPosToPixel(double y) {
+        return Util.mapRange(y, 0, 1, getHeight() - 1, 0);
+    }
+
     /**
      * Gets a color from resources by its id.
      * @param id
@@ -92,7 +108,7 @@ public class CurveView extends View {
      * Sets paint's stroke width by a resources id.
      * @param id
      */
-    private void setWidth(int id) {
+    private void setStrokeWidth(int id) {
         paint.setStrokeWidth(Util.readRInt(getResources(), id));
     }
 
@@ -104,12 +120,10 @@ public class CurveView extends View {
      * @param endY
      */
     private void drawLine(float startX, float startY, float endX, float endY) {
-        int width = getWidth();
-        int height = getHeight();
-        startX = (float)Util.mapRange(startX, 0, 1, 0, width - 1);
-        startY = (float)Util.mapRange(startY, 0, 1, height - 1, 0);
-        endX   = (float)Util.mapRange(endX,   0, 1, 0, width - 1);
-        endY   = (float)Util.mapRange(endY,   0, 1, height - 1, 0);
+        startX = (float)xPosToPixel(startX);
+        startY = (float)yPosToPixel(startY);
+        endX   = (float)xPosToPixel(endX);
+        endY   = (float)yPosToPixel(endY);
         canvas.drawLine(startX, startY, endX, endY, paint);
     }
 
@@ -137,7 +151,7 @@ public class CurveView extends View {
     private void drawGridLines() {
         // paint settings
         setColor(R.color.graphLines);
-        setWidth(R.integer.graphGridlineWidth);
+        setStrokeWidth(R.integer.graphGridlineWidth);
         // for each line between sections
         int numSections = Util.readRInt(getResources(), R.integer.graphAxisSections);
         for (int index = 1; index < numSections; index++) {
@@ -154,7 +168,7 @@ public class CurveView extends View {
     private void drawCurve() {
         // paint settings
         setColor(R.color.graphCurve);
-        setWidth(R.integer.graphCurveWidth);
+        setStrokeWidth(R.integer.graphCurveWidth);
         // for pairs of points in the curve
         PointToPointCurve p2p = curve.asPointToPoint();
         Vector<Pair<Double, Double>> points = p2p.getPoints();
@@ -181,8 +195,8 @@ public class CurveView extends View {
         setColor(R.color.graphDot);
         // draw each point
         for (Pair<Double, Double> pt : curve.getPoints()) {
-            float x = (float)Util.mapRange(pt.first, 0, 1, 0, width - 1);
-            float y = (float)Util.mapRange(pt.first, 0, 1, height - 1, 0);
+            float x = (float)xPosToPixel(pt.first);
+            float y = (float)yPosToPixel(pt.second);
             canvas.drawCircle(x, y, radius, paint);
         }
     }
