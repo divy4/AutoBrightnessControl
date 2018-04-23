@@ -16,11 +16,11 @@
     <string name="transition_time_title">Transition time</string>
 
     <!-- Settings -->
-    <string name="helpString1">Help1</string>
-    <string name="helpString2">Help2</string>
-    <string name="helpString3">Help3</string>
-    <string name="helpString4">Help4</string>
-    <string name="helpString5">Help5</string>
+    <string name="helpString1">This is the curve editor. This curve defines, given the ambient light level (the x-axis of the graph), how bright your screen should be (the y-axis of the graph). For instance, the example graph below shows a setting that makes the screen brighter as the environment gets brighter.</string>
+    <string name="helpString2">The red dots on the screen define the curve and can be manipulated. To add a point, simply tap anywhere on the screen that doesn\'t already contain a dot as seeen below.</string>
+    <string name="helpString3">Any dot on the screen can be moved by dragging your finger from the dot to where you want the dot to be.</string>
+    <string name="helpString4">Don\'t forget that the dots on the left and right edge can be moved as well. Just move them like you would any dot, except they will stick to the left or right.</string>
+    <string name="helpString5">That\'s it! Have fun editing curves!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

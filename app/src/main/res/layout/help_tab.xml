@@ -1,54 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gui.tab.HelpTab">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/helpText1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/helpString1" />
 
-            <TextView
-                android:id="@+id/helpText1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/helpString1" />
+        <ImageView
+            android:id="@+id/helpImage1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/helpString1"
-                android:src="@drawable/tutorial1" />
+        <TextView
+            android:id="@+id/helpText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/helpString2" />
 
-            <TextView
-                android:id="@+id/helpText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/helpString2" />
+        <ImageView
+            android:id="@+id/helpImage2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round" />
 
-            <TextView
-                android:id="@+id/helpText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/helpString3" />
+        <TextView
+            android:id="@+id/helpText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/helpString3" />
 
-            <TextView
-                android:id="@+id/helpText4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/helpString4" />
+        <ImageView
+            android:id="@+id/helpImage3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round" />
 
-        </LinearLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/helpText4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/helpString4" />
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/helpImage4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/helpText5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/helpString5" />
+    </LinearLayout>
+</ScrollView>
