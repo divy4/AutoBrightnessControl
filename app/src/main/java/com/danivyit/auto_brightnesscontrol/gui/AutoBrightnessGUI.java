@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.danivyit.auto_brightnesscontrol.R;
 import com.danivyit.auto_brightnesscontrol.control.Controller;
 import com.danivyit.auto_brightnesscontrol.gui.tab.GraphTab;
+import com.danivyit.auto_brightnesscontrol.gui.tab.HelpTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.ProfilesTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.SettingsTab;
 
@@ -33,6 +34,9 @@ public class AutoBrightnessGUI extends AppCompatActivity {
                 case R.id.profilesTabButton:
                     setTab(profilesTab);
                     break;
+                case R.id.helpTabButton:
+                    setTab(helpTab);
+                    break;
             }
             return true;
         }
@@ -41,6 +45,7 @@ public class AutoBrightnessGUI extends AppCompatActivity {
     private GraphTab graphTab;
     private ProfilesTab profilesTab;
     private SettingsTab settingsTab;
+    private HelpTab helpTab;
     private Controller controller;
 
     /**
@@ -55,6 +60,7 @@ public class AutoBrightnessGUI extends AppCompatActivity {
         graphTab = new GraphTab();
         profilesTab = new ProfilesTab();
         settingsTab = new SettingsTab();
+        helpTab = new HelpTab();
         setTab(settingsTab);
         // change tab when one is selected
         BottomNavigationView tabSelector = findViewById(R.id.tabSelector);
