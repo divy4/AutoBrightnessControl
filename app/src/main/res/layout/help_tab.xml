@@ -18,16 +18,35 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/helpText1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="@string/helpString1" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/helpString1"
                 android:src="@drawable/tutorial1" />
+
+            <TextView
+                android:id="@+id/helpText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/helpString2" />
+
+            <TextView
+                android:id="@+id/helpText3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/helpString3" />
+
+            <TextView
+                android:id="@+id/helpText4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/helpString4" />
 
         </LinearLayout>
     </ScrollView>
