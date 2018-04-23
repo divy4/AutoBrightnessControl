@@ -15,6 +15,12 @@
     <string name="update_freq_title">Update frequency</string>
     <string name="transition_time_title">Transition time</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Settings -->
+    <string name="helpString1">Help1</string>
+    <string name="helpString2">Help2</string>
+    <string name="helpString3">Help3</string>
+    <string name="helpString4">Help4</string>
+    <string name="helpString5">Help5</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
