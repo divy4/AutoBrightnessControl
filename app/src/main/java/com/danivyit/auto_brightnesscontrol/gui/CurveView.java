@@ -6,6 +6,9 @@ import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.danivyit.auto_brightnesscontrol.R;
@@ -23,12 +26,65 @@ import static java.lang.Math.min;
  */
 public class CurveView extends View {
 
-    // the number of sections eact
-    private static int numSections = 10;
+    private class TouchListener implements OnTouchListener {
+        /**
+         * Called when a touch event is dispatched to a view. This allows listeners to
+         * get a chance to respond before the target view.
+         *
+         * @param v     The view the touch event has been dispatched to.
+         * @param event The MotionEvent object containing full information about
+         *              the event.
+         * @return True if the listener has consumed the event, false otherwise.
+         */
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            double x = xPixelToPos(event.getX());
+            double y = yPixelToPos(event.getY());
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                lastTouchPt = null;
+            } else {
+                // remove last point
+                if (lastTouchPt != null) {
+                    curve.remove(lastTouchPt.first);
+                }
+                // add new point
+                curve.put(x, y);
+                lastTouchPt = new Pair(x, y);
+                v.invalidate();
+            }
+            return true;
+        }
+    }
+
+    private class DragListener implements View.OnDragListener {
+        /**
+         * Called when a drag event is dispatched to a view. This allows listeners
+         * to get a chance to override base View behavior.
+         *
+         * @param v     The View that received the drag event.
+         * @param event The {@link DragEvent} object for the drag event.
+         * @return {@code true} if the drag event was handled successfully, or {@code false}
+         * if the drag event was not handled. Note that {@code false} will trigger the View
+         * to call its {@link #onDragEvent(DragEvent) onDragEvent()} handler.
+         */
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            Log.i("asdf", "asdf");
+            double x = xPixelToPos(event.getX());
+            double y = yPixelToPos(event.getY());
+            // replace closest point with dragged point
+            curve.remove(lastTouchPt.first);
+            curve.put(x, y);
+            lastTouchPt = new Pair(x, y);
+            v.invalidate();
+            return true;
+        }
+    }
 
     private Paint paint;
     private Canvas canvas;
     private Curve curve;
+    private Pair<Double, Double> lastTouchPt;
 
     /**
      * Constructs a CurveView. See android documentation for argument details.
@@ -65,24 +121,48 @@ public class CurveView extends View {
      */
     private void init() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        curve = new BezierCurve(50);
+        // curve
+        curve = new BezierCurve(50, 10);
         curve.put(0, 0);
-        curve.put(0.3, 0.7);
         curve.put(1, 1);
+        // listeners
+        this.setOnTouchListener(new TouchListener());
+        //this.setOnDragListener(new DragListener());
+        lastTouchPt = null;
     }
 
-    private double xPixelToPos(int x) {
+    /**
+     * Converts a x position on the view to its x value on the graph.
+     * @param x
+     * @return
+     */
+    private double xPixelToPos(double x) {
         return Util.mapRange(x, 0,getWidth() - 1, 0, 1);
     }
 
-    private double yPixelToPos(int y) {
+    /**
+     * Converts a y position on the view to its y value on the graph.
+     * @param y
+     * @return
+     */
+    private double yPixelToPos(double y) {
         return Util.mapRange(y, 0,getHeight() - 1, 1, 0);
     }
 
+    /**
+     * Converts a x position on the graph to its x value on the view.
+     * @param x
+     * @return
+     */
     private double xPosToPixel(double x) {
         return Util.mapRange(x, 0, 1, 0, getWidth() - 1);
     }
 
+    /**
+     * Converts a y position on the graph to its y value on the view.
+     * @param y
+     * @return
+     */
     private double yPosToPixel(double y) {
         return Util.mapRange(y, 0, 1, getHeight() - 1, 0);
     }

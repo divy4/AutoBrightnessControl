@@ -22,7 +22,7 @@ public class Controller {
         this.gui = gui;
         // TEMP: create basic adjustment curve
         Curve curve = new BezierCurve(10);
-        curve.put(0, 0.2);
+        curve.put(0, 0.3);
         curve.put(1, 0.8);
         // setup light updater
         this.lightUpdater = new BacklightUpdater(gui.getApplicationContext(), 2, 0.1);
