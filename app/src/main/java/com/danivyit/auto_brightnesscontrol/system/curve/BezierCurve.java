@@ -13,6 +13,7 @@ public class BezierCurve extends Curve {
 
     PointToPointCurve p2pCurve;
     int numApproxPoints;
+    double weight;
 
     /**
      * Creates a new BezierCurve.
@@ -22,6 +23,19 @@ public class BezierCurve extends Curve {
         super();
         this.p2pCurve = null;
         this.numApproxPoints = numPoints;
+        this.weight = 1;
+    }
+
+    /**
+     * Creates a new BezierCurve.
+     * @param numPoints The number of points that should be used to approximate the bezier curve.
+     * @param weight The weight of the control points.
+     */
+    public BezierCurve(int numPoints, double weight) {
+        super();
+        this.p2pCurve = null;
+        this.numApproxPoints = numPoints;
+        this.weight = weight;
     }
 
     /**
@@ -77,13 +91,20 @@ public class BezierCurve extends Curve {
         double x = 0;
         double y = 0;
         double denominator = 0;
+        int numCtrlPts = controlPts.size();
         // for each control point
-        for (int controlIndex = 0; controlIndex < controlPts.size(); controlIndex++) {
+        for (int controlIndex = 0; controlIndex < numCtrlPts; controlIndex++) {
             Pair<Double, Double> point = controlPts.get(controlIndex);
+            // point weight
+            double w = weight;
+            if (controlIndex == 0 || controlIndex == numCtrlPts - 1) {
+                w = 1;
+            }
             // The bezier coefficient
             double coef = binomialCoefficientDouble(numControlPts - 1, controlIndex) *
                     Math.pow(t, controlIndex) *
-                    Math.pow(1 - t, numControlPts - 1 - controlIndex);
+                    Math.pow(1 - t, numControlPts - 1 - controlIndex)*
+                    w;
             // add weighted control point
             x += coef * point.first;
             y += coef * point.second;
