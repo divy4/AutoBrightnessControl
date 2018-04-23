@@ -15,4 +15,9 @@
         android:id="@+id/profilesTabButton"
         android:icon="@android:drawable/ic_menu_save"
         android:title="@string/profiles_tab_button" />
+
+    <item
+        android:id="@+id/helpTabButton"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/help_tab_button" />
 </menu>

@@ -27,6 +27,55 @@ import static java.lang.Math.min;
 public class CurveView extends View {
 
     private class TouchListener implements OnTouchListener {
+
+        /**
+         * Removes the closest point to x when the user first touches the view and is too close to that point.
+         * @param event
+         * @param x
+         */
+        private void removeNearby(MotionEvent event, double x) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Pair<Double, Double> nearby = curve.closest(x);
+                if (Math.abs(nearby.first - x) < Util.readRDouble(getResources(), R.dimen.minGraphDotDist)) {
+                    curve.remove(nearby.first);
+                }
+            }
+        }
+
+        /**
+         * Removes the last created point when the user moves their finger.
+         * @param event
+         */
+        private void removeLast(MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_MOVE && lastTouchPt != null) {
+                curve.remove(lastTouchPt.first);
+            }
+        }
+
+        /**
+         * Tries to place a point at x, y.
+         * @param x
+         * @param y
+         */
+        private void placePoint(double x, double y) {
+            // snap to edge if editing first or last point
+            Pair<Double, Double> firstPt = curve.first();
+            Pair<Double, Double> lastPt = curve.last();
+            if (firstPt.first != 0) {
+                x = 0;
+            } else if (lastPt.first != 1) {
+                x = 1;
+            // don't get too close to other points
+            } else {
+                Pair<Double, Double> closestPt = curve.closest(x);
+                double minDist = Util.readRDouble(getResources(), R.dimen.minGraphDotDist);
+                if (Math.abs(x - closestPt.first) < minDist) {
+                    x = closestPt.first + Math.signum(x - closestPt.first) * minDist;
+                }
+            }
+            curve.put(x, y);
+        }
+
         /**
          * Called when a touch event is dispatched to a view. This allows listeners to
          * get a chance to respond before the target view.
@@ -40,19 +89,9 @@ public class CurveView extends View {
         public boolean onTouch(View v, MotionEvent event) {
             double x = xPixelToPos(event.getX());
             double y = yPixelToPos(event.getY());
-            // remove nearby point
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                Pair<Double, Double> nearby = curve.closest(x);
-                if (Math.abs(nearby.first - x) < Util.readRDouble(getResources(), R.dimen.minGraphDotDist)) {
-                    curve.remove(nearby.first);
-                }
-            }
-            // remove last point
-            if (event.getAction() == MotionEvent.ACTION_MOVE && lastTouchPt != null) {
-                curve.remove(lastTouchPt.first);
-            }
-            // add new point
-            curve.put(x, y);
+            removeNearby(event, x);
+            removeLast(event);
+            placePoint(x, y);
             // lifting finger
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 lastTouchPt = null;
