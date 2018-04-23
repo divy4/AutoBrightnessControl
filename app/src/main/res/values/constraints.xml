@@ -16,5 +16,6 @@
     <!-- graph settings -->
     <!-- the number of ways each axis on a graph should be divided -->
     <integer name="graphAxisSections">20</integer>
+    <item name="minGraphDotDist" format="float" type="dimen">0.05</item>
 
 </resources>

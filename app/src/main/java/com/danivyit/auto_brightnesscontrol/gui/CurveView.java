@@ -40,42 +40,25 @@ public class CurveView extends View {
         public boolean onTouch(View v, MotionEvent event) {
             double x = xPixelToPos(event.getX());
             double y = yPixelToPos(event.getY());
+            // remove nearby point
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Pair<Double, Double> nearby = curve.closest(x);
+                if (Math.abs(nearby.first - x) < Util.readRDouble(getResources(), R.dimen.minGraphDotDist)) {
+                    curve.remove(nearby.first);
+                }
+            }
+            // remove last point
+            if (event.getAction() == MotionEvent.ACTION_MOVE && lastTouchPt != null) {
+                curve.remove(lastTouchPt.first);
+            }
+            // add new point
+            curve.put(x, y);
+            // lifting finger
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 lastTouchPt = null;
             } else {
-                // remove last point
-                if (lastTouchPt != null) {
-                    curve.remove(lastTouchPt.first);
-                }
-                // add new point
-                curve.put(x, y);
                 lastTouchPt = new Pair(x, y);
-                v.invalidate();
             }
-            return true;
-        }
-    }
-
-    private class DragListener implements View.OnDragListener {
-        /**
-         * Called when a drag event is dispatched to a view. This allows listeners
-         * to get a chance to override base View behavior.
-         *
-         * @param v     The View that received the drag event.
-         * @param event The {@link DragEvent} object for the drag event.
-         * @return {@code true} if the drag event was handled successfully, or {@code false}
-         * if the drag event was not handled. Note that {@code false} will trigger the View
-         * to call its {@link #onDragEvent(DragEvent) onDragEvent()} handler.
-         */
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            Log.i("asdf", "asdf");
-            double x = xPixelToPos(event.getX());
-            double y = yPixelToPos(event.getY());
-            // replace closest point with dragged point
-            curve.remove(lastTouchPt.first);
-            curve.put(x, y);
-            lastTouchPt = new Pair(x, y);
             v.invalidate();
             return true;
         }
