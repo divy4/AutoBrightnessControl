@@ -1,7 +1,13 @@
 package com.danivyit.auto_brightnesscontrol;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class Util {
 
@@ -50,6 +56,55 @@ public class Util {
     static public int readRInt(Resources resources, int rawValue) {
         TypedValue value = new TypedValue();
         return resources.getInteger(rawValue);
+    }
+
+    /**
+     * Stores a string onto the hard drive.
+     * @param context The context of the application.
+     * @param filename The name of the file to store to.
+     * @param str The string to store.
+     * @return True if successful.
+     */
+    static public boolean storeString(Context context, String filename, String str) {
+        try {
+            File file = new File(context.getFilesDir(), filename);
+            FileWriter writer = new FileWriter(file);
+            writer.write(str);
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Stores a string onto the hard drive.
+     * @param context The context of the application.
+     * @param filename The name of the file to load from.
+     * @return null if unsuccessful.
+     */
+    static public String loadString(Context context, String filename) {
+        String str = "";
+        try {
+            File file = new File(context.getFilesDir(), filename);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            // read file line by line
+            String temp;
+            StringBuilder builder = new StringBuilder();
+            while (true) {
+                temp = reader.readLine();
+                if (temp == null) {
+                    break;
+                }
+                builder.append(temp);
+                builder.append("\n");
+            }
+            str = builder.toString();
+        } catch (Exception e) {
+            return null;
+        }
+        return str;
     }
 
 }

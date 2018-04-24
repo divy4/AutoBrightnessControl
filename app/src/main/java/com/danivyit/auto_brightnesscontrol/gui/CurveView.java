@@ -95,6 +95,7 @@ public class CurveView extends View {
             // lifting finger
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 lastTouchPt = null;
+                Util.storeString(getContext(), "curve", curve.toString());
             } else {
                 lastTouchPt = new Pair(x, y);
             }
@@ -143,13 +144,18 @@ public class CurveView extends View {
      */
     private void init() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        // curve
-        curve = new BezierCurve(50, 10);
-        curve.put(0, 0);
-        curve.put(1, 1);
+        // load curve
+        String curveStr = Util.loadString(getContext(), "curve");
+        if (curveStr != null) {
+            curve = new BezierCurve(50, 10, curveStr);
+        // create new curve
+        } else {
+            curve = new BezierCurve(50, 10);
+            curve.put(0, 0);
+            curve.put(1, 1);
+        }
         // listeners
         this.setOnTouchListener(new TouchListener());
-        //this.setOnDragListener(new DragListener());
         lastTouchPt = null;
     }
 

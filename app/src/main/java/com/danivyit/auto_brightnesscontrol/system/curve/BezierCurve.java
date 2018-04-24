@@ -39,6 +39,19 @@ public class BezierCurve extends Curve {
     }
 
     /**
+     * Creates a new BezierCurve.
+     * @param numPoints The number of points that should be used to approximate the bezier curve.
+     * @param weight The weight of the control points.
+     * @param str A string created from the toString() method.
+     */
+    public BezierCurve(int numPoints, double weight, String str) {
+        super(str);
+        this.p2pCurve = null;
+        this.numApproxPoints = numPoints;
+        this.weight = weight;
+    }
+
+    /**
      * Sets the number of points that should be used to approximate the bezier curve.
      * @param numPoints
      */

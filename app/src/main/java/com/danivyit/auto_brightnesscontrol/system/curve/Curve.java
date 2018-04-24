@@ -3,6 +3,7 @@ package com.danivyit.auto_brightnesscontrol.system.curve;
 import android.graphics.Point;
 import android.support.v4.util.Pair;
 
+import java.io.File;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
