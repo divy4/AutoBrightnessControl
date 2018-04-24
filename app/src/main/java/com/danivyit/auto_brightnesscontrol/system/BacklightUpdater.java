@@ -72,8 +72,8 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
             double f = 0.01 / Math.abs(brightness - lastBrightness);
             delay *= Math.max(0.1, Math.min(1, f));
         }
+        lastBrightness = 0.3 * lastBrightness + 0.7 * brightness;
         setDelay(delay);
-        lastBrightness = brightness;
     }
 
     /**
