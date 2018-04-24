@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import com.danivyit.auto_brightnesscontrol.Util;
 import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
@@ -16,15 +17,17 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
     private SensorManager manager;
     private Sensor lightSensor;
     private double ambientLight;
+    private double baseDelay;
+    private double lastBrightness;
 
     /**
      * Creates a new BacklightUpdater.
      * @param applicationContext The application context.
-     * @param delay The amount of time (in seconds) to sleep before the backlight is updated again.
+     * @param baseDelay The amount of time (in seconds) to sleep before the backlight is updated again.
      * @param transitionTime The amount of time the updater uses to transition between brightness levels. Should be less than delay.
      */
-    public BacklightUpdater(Context applicationContext, double delay, double transitionTime) {
-        super(delay);
+    public BacklightUpdater(Context applicationContext, double baseDelay, double transitionTime) {
+        super(baseDelay);
         this.backlight = new Backlight(applicationContext, transitionTime);
         this.adjustmentCurve = null;
         // get light sensor
@@ -33,6 +36,8 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
         // register light sensor
         this.manager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.ambientLight = 0;
+        this.baseDelay = baseDelay;
+        this.lastBrightness = -1;
     }
 
     @Override
@@ -61,6 +66,14 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
             brightness = adjustmentCurve.predict(brightness);
         }
         backlight.transitionTo(brightness);
+        // compute next delay
+        double delay = baseDelay;
+        if (brightness != lastBrightness) {
+            double f = 0.01 / Math.abs(brightness - lastBrightness);
+            delay *= Math.max(0.1, Math.min(1, f));
+        }
+        setDelay(delay);
+        lastBrightness = brightness;
     }
 
     /**
