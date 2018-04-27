@@ -6,5 +6,7 @@
     <integer name="graphGridlineWidth">1</integer>
     <integer name="graphCurveWidth">3</integer>
     <item name="graphDotSize" format="float" type="dimen">30</item>
+    
+    <dimen name="profileHeight">50dp</dimen>
 
 </resources>
