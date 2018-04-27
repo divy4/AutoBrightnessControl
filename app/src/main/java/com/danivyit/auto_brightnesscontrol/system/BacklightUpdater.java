@@ -41,6 +41,11 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
     }
 
     @Override
+    public void setDelay(double sec) {
+        baseDelay = sec;
+    }
+
+    @Override
     public void queueStop() {
         super.queueStop();
         manager.unregisterListener(this);

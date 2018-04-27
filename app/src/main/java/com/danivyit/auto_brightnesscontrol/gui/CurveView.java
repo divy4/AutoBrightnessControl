@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -21,9 +22,7 @@ import java.util.Vector;
 
 import static java.lang.Math.min;
 
-/**
- * TODO: document your custom view class.
- */
+
 public class CurveView extends View {
 
     private class TouchListener implements OnTouchListener {
