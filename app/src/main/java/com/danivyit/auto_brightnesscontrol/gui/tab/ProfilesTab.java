@@ -38,8 +38,7 @@ public class ProfilesTab extends com.danivyit.auto_brightnesscontrol.gui.tab.Tab
         view.setLayoutManager(layoutManager);
         // data
         items = new Vector();
-        items.add("asdf");
-        items.add("asdf2");
+        items.add("new profile");
         adapter = new CurveViewAdapter(items);
         view.setAdapter(adapter);
         return view;
