@@ -7,7 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
 
 import com.danivyit.auto_brightnesscontrol.R;
 import com.danivyit.auto_brightnesscontrol.control.Controller;
@@ -15,6 +19,7 @@ import com.danivyit.auto_brightnesscontrol.gui.tab.GraphTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.HelpTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.ProfilesTab;
 import com.danivyit.auto_brightnesscontrol.gui.tab.SettingsTab;
+import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 public class AutoBrightnessGUI extends AppCompatActivity {
 
@@ -94,6 +99,43 @@ public class AutoBrightnessGUI extends AppCompatActivity {
                     trans.commit();
                 }
             }
+        }
+    }
+
+    /**
+     * Adds a listener for when the system is enabled.
+     * @param listener
+     */
+    public void addEnableListener(CompoundButton.OnCheckedChangeListener listener) {
+        settingsTab.addEnableListener(listener);
+    }
+
+    /**
+     * Adds a listener for when the update frequency is changed.
+     * @param listener
+     */
+    public void addUpdateFreqListener(SeekBar.OnSeekBarChangeListener listener) {
+        settingsTab.addUpdateFreqListener(listener);
+    }
+
+    /**
+     * Adds a listener for when the curve editor is touched.
+     * @param listener
+     */
+    public void addCurveTouchListener(View.OnTouchListener listener) {
+        graphTab.addCurveTouchListener(listener);
+    }
+
+    /**
+     * Updates the curve editor.
+     * @param curve
+     */
+    public void update(double updateFreq, Curve curve) {
+        if (settingsTab.isAdded()) {
+            settingsTab.update(updateFreq);
+        }
+        if (graphTab.isAdded()) {
+            graphTab.update(curve);
         }
     }
 }

@@ -7,6 +7,7 @@
     tools:context=".gui.tab.GraphTab">
 
     <com.danivyit.auto_brightnesscontrol.gui.CurveView
+        android:id="@+id/curveView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ccc"

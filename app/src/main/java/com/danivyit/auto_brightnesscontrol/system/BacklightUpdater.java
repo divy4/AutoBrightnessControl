@@ -10,14 +10,18 @@ import android.util.Log;
 import com.danivyit.auto_brightnesscontrol.Util;
 import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class BacklightUpdater extends RepeatingThread implements SensorEventListener {
 
-    private Backlight backlight;
+    private AtomicReference<Double> baseDelay;
     private Curve adjustmentCurve;
+
+    private Backlight backlight;
+
     private SensorManager manager;
     private Sensor lightSensor;
     private double ambientLight;
-    private double baseDelay;
     private double lastBrightness;
 
     /**
@@ -28,23 +32,46 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
      */
     public BacklightUpdater(Context applicationContext, double baseDelay, double transitionTime) {
         super(baseDelay);
-        this.backlight = new Backlight(applicationContext, transitionTime);
+        // other
+        this.baseDelay = new AtomicReference(baseDelay);
         this.adjustmentCurve = null;
+        // components
+        this.backlight = new Backlight(applicationContext, transitionTime);
         // get light sensor
         this.manager = (SensorManager) applicationContext.getSystemService(Context.SENSOR_SERVICE);
         this.lightSensor = manager.getDefaultSensor(Sensor.TYPE_LIGHT);
         // register light sensor
         this.manager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.ambientLight = 0;
-        this.baseDelay = baseDelay;
         this.lastBrightness = -1;
     }
 
-    @Override
-    public void setDelay(double sec) {
-        baseDelay = sec;
+    /**
+     * Returns the delay between backlight updates.
+     * @return
+     */
+    public double getDelay() {
+        if (baseDelay != null) {
+            return baseDelay.get();
+        } else {
+            return 0;
+        }
     }
 
+    /**
+     * Sets the delay between backlight updates.
+     * @param sec
+     */
+    @Override
+    public void setDelay(double sec) {
+        if (baseDelay != null) {
+            baseDelay.set(sec);
+        }
+    }
+
+    /**
+     * Queues the thread to stop.
+     */
     @Override
     public void queueStop() {
         super.queueStop();
@@ -72,13 +99,13 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
         }
         backlight.transitionTo(brightness);
         // compute next delay
-        double delay = baseDelay;
+        double delay = baseDelay.get();
         if (brightness != lastBrightness) {
             double f = 0.01 / Math.abs(brightness - lastBrightness);
             delay *= Math.max(0.1, Math.min(1, f));
         }
         lastBrightness = 0.3 * lastBrightness + 0.7 * brightness;
-        setDelay(delay);
+        super.setDelay(delay);
     }
 
     /**
@@ -98,4 +125,11 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
      */
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) { }
+
+    /**
+     * Returns the ambient light level.
+     */
+    public double getAmbientLight() {
+        return Util.mapRange(ambientLight, 0, lightSensor.getMaximumRange(), 0, 1);
+    }
 }
