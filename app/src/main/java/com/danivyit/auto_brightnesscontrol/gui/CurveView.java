@@ -25,88 +25,9 @@ import static java.lang.Math.min;
 
 public class CurveView extends View {
 
-    private class TouchListener implements OnTouchListener {
-
-        /**
-         * Removes the closest point to x when the user first touches the view and is too close to that point.
-         * @param event
-         * @param x
-         */
-        private void removeNearby(MotionEvent event, double x) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                Pair<Double, Double> nearby = curve.closest(x);
-                if (Math.abs(nearby.first - x) < Util.readRDouble(getResources(), R.dimen.minGraphDotDist)) {
-                    curve.remove(nearby.first);
-                }
-            }
-        }
-
-        /**
-         * Removes the last created point when the user moves their finger.
-         * @param event
-         */
-        private void removeLast(MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_MOVE && lastTouchPt != null) {
-                curve.remove(lastTouchPt.first);
-            }
-        }
-
-        /**
-         * Tries to place a point at x, y.
-         * @param x
-         * @param y
-         */
-        private void placePoint(double x, double y) {
-            // snap to edge if editing first or last point
-            Pair<Double, Double> firstPt = curve.first();
-            Pair<Double, Double> lastPt = curve.last();
-            if (firstPt.first != 0) {
-                x = 0;
-            } else if (lastPt.first != 1) {
-                x = 1;
-            // don't get too close to other points
-            } else {
-                Pair<Double, Double> closestPt = curve.closest(x);
-                double minDist = Util.readRDouble(getResources(), R.dimen.minGraphDotDist);
-                if (Math.abs(x - closestPt.first) < minDist) {
-                    x = closestPt.first + Math.signum(x - closestPt.first) * minDist;
-                }
-            }
-            curve.put(x, y);
-        }
-
-        /**
-         * Called when a touch event is dispatched to a view. This allows listeners to
-         * get a chance to respond before the target view.
-         *
-         * @param v     The view the touch event has been dispatched to.
-         * @param event The MotionEvent object containing full information about
-         *              the event.
-         * @return True if the listener has consumed the event, false otherwise.
-         */
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            double x = xPixelToPos(event.getX());
-            double y = yPixelToPos(event.getY());
-            removeNearby(event, x);
-            removeLast(event);
-            placePoint(x, y);
-            // lifting finger
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                lastTouchPt = null;
-                Util.storeString(getContext(), "curve", curve.toString());
-            } else {
-                lastTouchPt = new Pair(x, y);
-            }
-            v.invalidate();
-            return true;
-        }
-    }
-
     private Paint paint;
     private Canvas canvas;
     private Curve curve;
-    private Pair<Double, Double> lastTouchPt;
 
     /**
      * Constructs a CurveView. See android documentation for argument details.
@@ -143,19 +64,7 @@ public class CurveView extends View {
      */
     private void init() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        // load curve
-        String curveStr = Util.loadString(getContext(), "curve");
-        if (curveStr != null) {
-            curve = new BezierCurve(50, 10, curveStr);
-        // create new curve
-        } else {
-            curve = new BezierCurve(50, 10);
-            curve.put(0, 0);
-            curve.put(1, 1);
-        }
-        // listeners
-        this.setOnTouchListener(new TouchListener());
-        lastTouchPt = null;
+        curve = null;
     }
 
     /**
@@ -163,7 +72,7 @@ public class CurveView extends View {
      * @param x
      * @return
      */
-    private double xPixelToPos(double x) {
+    public double xPixelToPos(double x) {
         return Util.mapRange(x, 0,getWidth() - 1, 0, 1);
     }
 
@@ -172,7 +81,7 @@ public class CurveView extends View {
      * @param y
      * @return
      */
-    private double yPixelToPos(double y) {
+    public double yPixelToPos(double y) {
         return Util.mapRange(y, 0,getHeight() - 1, 1, 0);
     }
 
@@ -245,7 +154,7 @@ public class CurveView extends View {
         canvas.drawColor(getColor(R.color.graphBackground));
         drawGridLines();
         if (curve != null) {
-            drawCurve();
+            drawCurve(curve);
             drawCurveDots();
         }
         // removed cached canvas
@@ -272,7 +181,7 @@ public class CurveView extends View {
     /**
      * Draws the curve on the canvas.
      */
-    private void drawCurve() {
+    private void drawCurve(Curve curve) {
         // paint settings
         setColor(R.color.graphCurve);
         setStrokeWidth(R.integer.graphCurveWidth);
@@ -295,8 +204,6 @@ public class CurveView extends View {
      * Draws the control points of the curve.
      */
     private void drawCurveDots() {
-        int width = getWidth();
-        int height = getHeight();
         float radius = (float)Util.readRDouble(getResources(), R.dimen.graphDotSize);
         // paint settings
         setColor(R.color.graphDot);
@@ -306,6 +213,15 @@ public class CurveView extends View {
             float y = (float)yPosToPixel(pt.second);
             canvas.drawCircle(x, y, radius, paint);
         }
+    }
+
+    /**
+     * Updates the view to reflect a curve.
+     * @param curve
+     */
+    public void update(Curve curve) {
+        this.curve = curve;
+        this.invalidate();
     }
 
 }
