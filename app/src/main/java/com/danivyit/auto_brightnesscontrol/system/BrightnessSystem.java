@@ -1,8 +1,8 @@
 package com.danivyit.auto_brightnesscontrol.system;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.danivyit.auto_brightnesscontrol.R;
 import com.danivyit.auto_brightnesscontrol.Util;
@@ -10,8 +10,10 @@ import com.danivyit.auto_brightnesscontrol.system.curve.BezierCurve;
 import com.danivyit.auto_brightnesscontrol.system.curve.Curve;
 
 import java.util.Observable;
+import java.util.Observer;
 
-public class BrightnessSystem extends java.util.Observable {
+
+public class BrightnessSystem extends java.util.Observable implements Observer {
 
     private Context context;
 
@@ -22,7 +24,14 @@ public class BrightnessSystem extends java.util.Observable {
     private Curve curve;
     private Pair<Double, Double> lastTouch;
 
-    public BrightnessSystem(Context context) {
+    private NFCHandler nfcHandler;
+
+    /**
+     * Creates a new BrightnessSystem
+     * @param context
+     * @param activity
+     */
+    public BrightnessSystem(Context context, Activity activity) {
         this.context = context;
         // curve
         String curveStr = Util.loadString(context, "curve");
@@ -37,6 +46,11 @@ public class BrightnessSystem extends java.util.Observable {
         this.lightUpdater = new BacklightUpdater(context, 2, 0.1);
         lightUpdater.setAdjustmentCurve(curve);
         this.enabled = false;
+        // nfc
+        nfcHandler = new NFCHandler(activity);
+        nfcHandler.setSendMessage(curve.toString());
+        nfcHandler.addObserver(this);
+        // update GUI
         notifyChange();
     }
 
@@ -209,4 +223,13 @@ public class BrightnessSystem extends java.util.Observable {
         notifyObservers();
     }
 
+    /**
+     * Called when an observed observable has changed.
+     * @param observable
+     * @param o
+     */
+    @Override
+    public void update(Observable observable, Object o) {
+        notifyChange();
+    }
 }

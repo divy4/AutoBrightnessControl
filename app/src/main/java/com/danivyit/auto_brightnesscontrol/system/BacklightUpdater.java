@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BacklightUpdater extends RepeatingThread implements SensorEventListener {
 
     private AtomicReference<Double> baseDelay;
-    private Curve adjustmentCurve;
+    private AtomicReference<Curve> adjustmentCurve;
 
     private Backlight backlight;
 
@@ -34,7 +34,7 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
         super(baseDelay);
         // other
         this.baseDelay = new AtomicReference(baseDelay);
-        this.adjustmentCurve = null;
+        this.adjustmentCurve = new AtomicReference(null);
         // components
         this.backlight = new Backlight(applicationContext, transitionTime);
         // get light sensor
@@ -83,7 +83,7 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
      * @param curve
      */
     public void setAdjustmentCurve(Curve curve) {
-        this.adjustmentCurve = curve;
+        adjustmentCurve.set(curve);
     }
 
     /**
@@ -92,10 +92,11 @@ public class BacklightUpdater extends RepeatingThread implements SensorEventList
     @Override
     protected void runTask() {
         // map ambient light to brightness (linear)
-        double brightness = Util.mapRange(ambientLight, 0, lightSensor.getMaximumRange(), 0, 1);
+        double brightness = getAmbientLight();
         // use curve to adjust value
-        if (adjustmentCurve != null) {
-            brightness = adjustmentCurve.predict(brightness);
+        Curve curve = adjustmentCurve.get();
+        if (curve != null) {
+            brightness = curve.predict(brightness);
         }
         backlight.transitionTo(brightness);
         // compute next delay

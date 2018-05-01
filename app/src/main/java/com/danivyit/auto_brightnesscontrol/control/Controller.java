@@ -88,7 +88,7 @@ public class Controller implements java.util.Observer {
      */
     public Controller(AutoBrightnessGUI gui) {
         this.gui = gui;
-        this.system = new BrightnessSystem(gui.getApplicationContext());
+        this.system = new BrightnessSystem(gui.getApplicationContext(), gui);
         // observers and listeners
         system.addObserver(this);
         gui.addEnableListener(new EnableListener());
