@@ -5,6 +5,10 @@
     <!-- Needed to set screen brightness -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <!-- Needed to use nfc -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,19 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".gui.AutoBrightnessGUI">
+        <activity
+            android:name=".gui.AutoBrightnessGUI"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".system.BackgroundService"
-            android:enabled="true"
-            android:exported="true" />
-
     </application>
 
 </manifest>

@@ -29,6 +29,13 @@ public class Backlight {
             Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
             context.startActivity(intent);
         }
+        // nightlight settings
+        try {
+            Intent intent = new Intent(Settings.ACTION_NIGHT_DISPLAY_SETTINGS);
+            context.startActivity(intent);
+        } catch(Exception e) {
+            Log.i("App","Night display not supported.");
+        }
     }
 
     /**
